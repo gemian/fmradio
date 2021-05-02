@@ -42,7 +42,7 @@ else()
 endif()
 
 install(FILES ${PROJECT_NAME}.apparmor DESTINATION ${DATA_DIR})
-install(DIRECTORY assets DESTINATION ${DATA_DIR})
+install(FILES assets/fmradio.svg DESTINATION share/icons/hicolor/scalable/apps)
 
 qt5_add_resources(QT_RESOURCES qml/qml.qrc)
 add_executable(${PROJECT_NAME} main.cpp ${QT_RESOURCES})
@@ -68,7 +68,7 @@ add_custom_target(${DESKTOP_FILE_NAME} ALL
     COMMAND sed -i 's/${PROJECT_NAME}-//g' ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE_NAME}
 )
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE_NAME} DESTINATION ${DATA_DIR}/applications)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE_NAME} DESTINATION share/applications)
 
 add_subdirectory(po)
 add_subdirectory(plugins)

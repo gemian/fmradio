@@ -1,7 +1,7 @@
 [Desktop Entry]
-_Name=FM Radio
+Name=FM Radio
 Exec=fmradio %U
-Icon=assets/logo.svg
+Icon=fmradio
 Terminal=false
 Type=Application
 X-Ubuntu-Touch=true
