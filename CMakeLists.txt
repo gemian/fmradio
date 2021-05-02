@@ -1,28 +1,32 @@
-cmake_minimum_required(VERSION 3.0.0)
-project(fmradio C CXX)
+cmake_minimum_required(VERSION 3.7)
+project(fmradio)
+string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWER)
 
-set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+set(CMAKE_CXX_STANDARD 11)
+set(QT_MIN_VERSION "5.7.0")
 
-find_package(Qt5Core)
-find_package(Qt5Qml)
-find_package(Qt5Quick)
+find_package(ECM REQUIRED NO_MODULE)
 
-# Automatically create moc files
-set(CMAKE_AUTOMOC ON)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} "${CMAKE_SOURCE_DIR}/cmake")
 
-# Components PATH
-execute_process(
-    COMMAND dpkg-architecture -qDEB_HOST_MULTIARCH
-    OUTPUT_VARIABLE ARCH_TRIPLET
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
+find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Core Quick Test Gui Widgets QuickControls2)
 
-set(QT_IMPORTS_DIR "lib/${ARCH_TRIPLET}")
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(ECMQueryQmake)
+include(GenerateExportHeader)
 
-set(PROJECT_NAME "fmradio")
-set(FULL_PROJECT_NAME "fmradio.venji10")
-set(CMAKE_INSTALL_PREFIX /)
-set(DATA_DIR /)
+configure_file(manifest.json.in ${CMAKE_CURRENT_BINARY_DIR}/manifest.json)
+
+if(CLICK_MODE)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/manifest.json DESTINATION ${CMAKE_INSTALL_PREFIX})
+    set(CMAKE_INSTALL_PREFIX /)
+    set(DATA_DIR /)
+else(CLICK_MODE)
+    set(DATA_DIR ${CMAKE_INSTALL_DATADIR}/fmradio)
+    add_definitions(-DPACKAGE_QML_DIR="${KDE_INSTALL_QMLDIR}/org/gka/MediatekRadio")
+endif(CLICK_MODE)
+
 set(DESKTOP_FILE_NAME ${PROJECT_NAME}.desktop)
 
 # This command figures out the target architecture for use in the manifest file
@@ -37,15 +41,13 @@ else()
     )
 endif()
 
-configure_file(manifest.json.in ${CMAKE_CURRENT_BINARY_DIR}/manifest.json)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/manifest.json DESTINATION ${CMAKE_INSTALL_PREFIX})
 install(FILES ${PROJECT_NAME}.apparmor DESTINATION ${DATA_DIR})
 install(DIRECTORY assets DESTINATION ${DATA_DIR})
 
 qt5_add_resources(QT_RESOURCES qml/qml.qrc)
 add_executable(${PROJECT_NAME} main.cpp ${QT_RESOURCES})
 qt5_use_modules(${PROJECT_NAME} Gui Qml Quick QuickControls2)
-install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
+install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 # Translations
 file(GLOB_RECURSE I18N_SRC_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/po qml/*.qml qml/*.js)
@@ -66,10 +68,12 @@ add_custom_target(${DESKTOP_FILE_NAME} ALL
     COMMAND sed -i 's/${PROJECT_NAME}-//g' ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE_NAME}
 )
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE_NAME} DESTINATION ${DATA_DIR})
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${DESKTOP_FILE_NAME} DESTINATION ${DATA_DIR}/applications)
 
 add_subdirectory(po)
 add_subdirectory(plugins)
+
+add_dependencies(${PROJECT_NAME} mediatek-radio-plugin)
 
 # Make source files visible in qtcreator
 file(GLOB_RECURSE PROJECT_SRC_FILES

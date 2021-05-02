@@ -1,25 +1,26 @@
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-set(PLUGIN "MediatekRadio")
+set(CMAKE_CXX_STANDARD 11)
 
-set(
-    SRC
-    plugin.cpp
-    MediatekRadio.cpp
+find_package(ECM REQUIRED NO_MODULE)
+find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Core Quick Test Gui Widgets DBus)
+find_package(PkgConfig REQUIRED)
+
+include_directories(
+        ${QT5_INCLUDE_DIRS}
 )
 
-set(CMAKE_AUTOMOC ON)
+add_library(mediatek-radio-plugin SHARED plugin.cpp MediatekRadio.cpp)
 
-add_library(${PLUGIN} MODULE ${SRC})
-set_target_properties(${PLUGIN} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PLUGIN})
-qt5_use_modules(${PLUGIN} Qml Quick DBus)
+target_include_directories(mediatek-radio-plugin PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-execute_process(
-    COMMAND dpkg-architecture -qDEB_HOST_MULTIARCH
-    OUTPUT_VARIABLE ARCH_TRIPLET
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
+target_link_libraries(mediatek-radio-plugin
+        Qt5::Gui
+        Qt5::Qml
+        Qt5::Quick
+        Qt5::Widgets
+        Qt5::DBus
+        ${CMAKE_DL_LIBS}
+        )
 
-set(QT_IMPORTS_DIR "/lib/${ARCH_TRIPLET}")
 
-install(TARGETS ${PLUGIN} DESTINATION ${QT_IMPORTS_DIR}/${PLUGIN}/)
-install(FILES qmldir DESTINATION ${QT_IMPORTS_DIR}/${PLUGIN}/)
+install(TARGETS mediatek-radio-plugin LIBRARY DESTINATION ${KDE_INSTALL_QMLDIR}/org/gemian/MediatekRadio)
+install(FILES qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/org/gemian/MediatekRadio)

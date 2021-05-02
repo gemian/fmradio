@@ -3,18 +3,39 @@
 #include <QUrl>
 #include <QString>
 #include <QQuickView>
+#include <QQmlEngine>
 
-int main(int argc, char *argv[])
+class FMRadioApplication : public QGuiApplication {
+
+public:
+	FMRadioApplication(int &argc, char **argv);
+
+	virtual ~FMRadioApplication() override;
+
+private:
+	QQuickView *m_view;
+};
+
+FMRadioApplication::FMRadioApplication(int &argc, char **argv)
+: QGuiApplication(argc, argv), m_view(nullptr) {
+	auto *view = new QQuickView();
+	QObject::connect(view->engine(), SIGNAL(quit()), SLOT(quit()));
+	view->setSource(QUrl("qrc:/Main.qml"));
+	view->setResizeMode(QQuickView::SizeRootObjectToView);
+	view->show();
+}
+
+FMRadioApplication::~FMRadioApplication() {
+	delete m_view;
+}
+
+int main(int argc, char** argv)
 {
-    QGuiApplication *app = new QGuiApplication(argc, (char**)argv);
-    app->setApplicationName("fmradio.venji10");
+	FMRadioApplication application(argc, argv);
+	QGuiApplication::setApplicationName("FM Radio");
 
-    qDebug() << "Starting app from main.cpp";
+	qDebug() << "Starting app from main.cpp";
 
-    QQuickView *view = new QQuickView();
-    view->setSource(QUrl("qrc:/Main.qml"));
-    view->setResizeMode(QQuickView::SizeRootObjectToView);
-    view->show();
-
-    return app->exec();
+	int ret = QGuiApplication::exec();
+	return ret;
 }

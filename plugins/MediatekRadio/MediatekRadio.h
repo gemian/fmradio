@@ -18,15 +18,48 @@
 #define MEDIATEKRADIO_H
 
 #include <QObject>
+#include <QtQml>
+
+enum OutputValue {
+	OutputUnspecified,
+	OutputEarpiece,
+	OutputSpeaker,
+	OutputHeadset,
+	OutputHeadphone,
+	OutputBluetoothSco,
+	OutputScoHeadset,
+	OutputScoCarKit,
+	OutputSpeakerAndHeadphone,
+};
 
 class MediatekRadio : public QObject {
 	Q_OBJECT
+	Q_PROPERTY(int outputDevice READ outputDevice WRITE setOutputDevice NOTIFY outputDeviceChanged)
+	Q_PROPERTY(bool earpieceAvailable READ earpieceAvailable NOTIFY outputAvailabilityChanged)
+	Q_PROPERTY(bool speakerAvailable READ speakerAvailable NOTIFY outputAvailabilityChanged)
+	Q_PROPERTY(bool wiredHeadsetAvailable READ wiredHeadsetAvailable NOTIFY outputAvailabilityChanged)
+	Q_PROPERTY(bool wiredHeadphoneAvailable READ wiredHeadphoneAvailable NOTIFY outputAvailabilityChanged)
+	Q_PROPERTY(bool bluetoothScoAvailable READ bluetoothScoAvailable NOTIFY outputAvailabilityChanged)
+	Q_PROPERTY(bool scoHeadsetAvailable READ scoHeadsetAvailable NOTIFY outputAvailabilityChanged)
+	Q_PROPERTY(bool scoCarKitAvailable READ scoCarKitAvailable NOTIFY outputAvailabilityChanged)
+	Q_PROPERTY(bool speakerHeadphoneAvailable READ speakerAndHeadphoneAvailable NOTIFY outputAvailabilityChanged)
 
 private:
 	bool radioRunning = false;
-	bool isHeadset = false;
+	bool _earpieceAvailable = false;
+	bool _speakerAvailable = false;
+	bool _wiredHeadsetAvailable = false;
+	bool _wiredHeadphoneAvailable = false;
+	bool _bluetoothScoAvailable = false;
+	bool _scoHeadsetAvailable = false;
+	bool _scoCarKitAvailable = false;
+	bool _speakerAndHeadphoneAvailable = false;
+	int outputSink = -1;
+	int fmSource = -1;
 	int frequency = 10250;
 	int idx = -1;
+	int _outputDevice;
+
 	void preparePulseAudio();
 	void mute();
 	void unmute();
@@ -37,7 +70,7 @@ private:
 
 public:
 	MediatekRadio();
-	~MediatekRadio() /* = default*/ ;
+	~MediatekRadio() override /* = default*/;
 
 	Q_INVOKABLE QByteArray startRadio(int);
 	Q_INVOKABLE QByteArray stopRadio();
@@ -47,6 +80,26 @@ public:
 	Q_INVOKABLE int seekDown();
 	Q_INVOKABLE bool isRadioRunning();
 
+	int outputDevice() const;
+	void setOutputDevice(int outputValue);
+
+	bool earpieceAvailable();
+	bool speakerAvailable();
+	bool wiredHeadsetAvailable();
+	bool wiredHeadphoneAvailable();
+	bool bluetoothScoAvailable();
+	bool scoHeadsetAvailable();
+	bool scoCarKitAvailable();
+	bool speakerAndHeadphoneAvailable();
+
+Q_SIGNALS:
+	void outputDeviceChanged();
+	void outputAvailabilityChanged();
+
+private:
+	void findFMSource();
 };
+
+QML_DECLARE_TYPE(MediatekRadio)
 
 #endif

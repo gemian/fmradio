@@ -1,2 +1,2 @@
-module MediatekRadio
-plugin MediatekRadio
+module org.gemian.MediatekRadio
+plugin mediatek-radio-plugin

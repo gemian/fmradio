@@ -1,0 +1,26 @@
+Source: fmradio
+Section: x11
+Priority: optional
+Maintainer: Adam Boardman <adamboardman@gmail.com>
+Build-Depends:
+ debhelper (>= 10),
+ qtbase5-dev,
+ qtdeclarative5-dev,
+ qml-module-qtquick2,
+ qtquickcontrols2-5-dev,
+ intltool,
+ cmake,
+ extra-cmake-modules,
+ pkg-config
+Standards-Version: 3.9.8
+Homepage: https://github.com/gemian/fmradio-volla
+Vcs-Git: https://github.com/gemian/fmradio-volla.git
+Vcs-Browser: https://github.com/gemian/fmradio-volla
+
+Package: fmradio
+Architecture: any
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+Description: FM-Radio application
+ An application to allow you to listen to the radio
