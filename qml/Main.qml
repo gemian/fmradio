@@ -156,7 +156,7 @@ MainView {
 				onClicked: MediatekRadio.outputDevice = 7
 				Keys.onEnterPressed: MediatekRadio.outputDevice = 7
 				Keys.onReturnPressed: MediatekRadio.outputDevice = 7
-				KeyNavigation.up: headsetButton
+				KeyNavigation.up: wiredHeadsetButton
 				KeyNavigation.left: scoHeadsetButton
 				KeyNavigation.right: speakerAndHeadphoneButton
 				KeyNavigation.down: seekUpButton
@@ -169,7 +169,7 @@ MainView {
 				onClicked: MediatekRadio.outputDevice = 8
 				Keys.onEnterPressed: MediatekRadio.outputDevice = 8
 				Keys.onReturnPressed: MediatekRadio.outputDevice = 8
-				KeyNavigation.up: headphoneButton
+				KeyNavigation.up: wiredHeadphoneButton
 				KeyNavigation.left: scoCarKitButton
 				KeyNavigation.right: seekUpButton
 				KeyNavigation.down: seekUpButton
@@ -193,6 +193,7 @@ MainView {
 				text: i18n.tr('\<')
 				font.pixelSize: units.gu(10)
 				activeFocusOnTab: true
+				enabled: MediatekRadio.radioRunning
 				KeyNavigation.up: bluetoothScoButton
 				KeyNavigation.right: seekUpButton
 				KeyNavigation.down: startStopButton
@@ -223,6 +224,7 @@ MainView {
 				height: units.gu(20)
 				text: i18n.tr('\>')
 				font.pixelSize: units.gu(10)
+				enabled: MediatekRadio.radioRunning
 				activeFocusOnTab: true
 				KeyNavigation.up: speakerAndHeadphoneButton
 				KeyNavigation.left: seekDownButton
@@ -260,21 +262,21 @@ MainView {
 			KeyNavigation.left: seekDownButton
 			KeyNavigation.right: seekUpButton
 			onClicked: {
-				if(!MediatekRadio.isRadioRunning()) {
+				if(!MediatekRadio.radioRunning) {
 					text = MediatekRadio.startRadio(MediatekRadio.getFrequency())
 				} else {
 					text = MediatekRadio.stopRadio()
 				}
 			}
 			Keys.onEnterPressed: {
-				if(!MediatekRadio.isRadioRunning()) {
+				if(!MediatekRadio.radioRunning) {
 					text = MediatekRadio.startRadio(MediatekRadio.getFrequency())
 				} else {
 					text = MediatekRadio.stopRadio()
 				}
 			}
 			Keys.onReturnPressed: {
-				if(!MediatekRadio.isRadioRunning()) {
+				if(!MediatekRadio.radioRunning) {
 					text = MediatekRadio.startRadio(MediatekRadio.getFrequency())
 				} else {
 					text = MediatekRadio.stopRadio()

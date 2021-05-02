@@ -42,10 +42,11 @@ class MediatekRadio : public QObject {
 	Q_PROPERTY(bool bluetoothScoAvailable READ bluetoothScoAvailable NOTIFY outputAvailabilityChanged)
 	Q_PROPERTY(bool scoHeadsetAvailable READ scoHeadsetAvailable NOTIFY outputAvailabilityChanged)
 	Q_PROPERTY(bool scoCarKitAvailable READ scoCarKitAvailable NOTIFY outputAvailabilityChanged)
-	Q_PROPERTY(bool speakerHeadphoneAvailable READ speakerAndHeadphoneAvailable NOTIFY outputAvailabilityChanged)
+	Q_PROPERTY(bool speakerAndHeadphoneAvailable READ speakerAndHeadphoneAvailable NOTIFY outputAvailabilityChanged)
+	Q_PROPERTY(bool radioRunning READ isRadioRunning NOTIFY radioRunningChanged)
 
 private:
-	bool radioRunning = false;
+	bool _radioRunning = false;
 	bool _earpieceAvailable = false;
 	bool _speakerAvailable = false;
 	bool _wiredHeadsetAvailable = false;
@@ -78,7 +79,6 @@ public:
 	Q_INVOKABLE int getFrequency();
 	Q_INVOKABLE int seekUp();
 	Q_INVOKABLE int seekDown();
-	Q_INVOKABLE bool isRadioRunning();
 
 	int outputDevice() const;
 	void setOutputDevice(int outputValue);
@@ -92,9 +92,12 @@ public:
 	bool scoCarKitAvailable();
 	bool speakerAndHeadphoneAvailable();
 
+	bool isRadioRunning();
+
 Q_SIGNALS:
 	void outputDeviceChanged();
 	void outputAvailabilityChanged();
+	void radioRunningChanged();
 
 private:
 	void findFMSource();

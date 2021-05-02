@@ -192,7 +192,7 @@ void MediatekRadio::preparePulseAudio() {
 }
 
 bool MediatekRadio::isRadioRunning() {
-        return radioRunning;
+	return _radioRunning;
 }
 
 // Volume is always at 100% without this
@@ -229,7 +229,8 @@ QByteArray MediatekRadio::startRadio(int freq) {
 
 		preparePulseAudio();
 
-		radioRunning = true;
+		_radioRunning = true;
+		emit radioRunningChanged();
 		startVolumeUpdater();
 
 		return "Stop radio";
@@ -244,7 +245,7 @@ QByteArray MediatekRadio::stopRadio() {
 	char buf[255];
 	int ret = 0;
 
-	if (!radioRunning) {
+	if (!isRadioRunning()) {
 		return "Start radio";
 	}
 
@@ -279,7 +280,8 @@ QByteArray MediatekRadio::stopRadio() {
 
 	stopVolumeUpdater();
 
-	radioRunning = false;
+	_radioRunning = false;
+	emit radioRunningChanged();
 
 	return "Start radio";
 
@@ -339,7 +341,7 @@ int MediatekRadio::getRssi() {
 
 int MediatekRadio::seekUp() {
 
-	if(radioRunning) {
+	if(isRadioRunning()) {
 
 		mute();
 
@@ -367,7 +369,7 @@ int MediatekRadio::seekUp() {
 
 int MediatekRadio::seekDown() {
 
-	if(radioRunning) {
+	if(isRadioRunning()) {
 
 		mute();
 
