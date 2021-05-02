@@ -6,7 +6,7 @@ High priority:
 	Fix API usage to use async ones so that things happen in the background and the UI can be updated as and when, would also allow responding to external events eg unplugging of headphones/set
 
 Medium priority:
-	Create icon
+	Create icon [done]
 	Save last frequency
 	3 frequency saving slots at the bottom like in LOS FM Radio (or second page with list of all found frequencies and radio station name from radio text/user renamed)
 	Switch between headphones and speakers [done]
