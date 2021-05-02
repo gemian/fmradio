@@ -1,6 +1,6 @@
 # FM Radio
 
-FM Radio app for UT on the Vollaphone
+FM Radio app for UT on the Vollaphone, Gemian on the Cosmo Communicator
 
 ## License
 
@@ -10,7 +10,7 @@ Licensed under the Apache Software License 2.0
 
 ## Building
 
-You need clickable to build the app.
+You need clickable to build the app. Or debian package building
 
 The build.sh script crosscompiles the app for arm64
 and tries to copy the compiled package into the home directory of the phone via ssh.
