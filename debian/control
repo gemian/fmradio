@@ -22,5 +22,6 @@ Architecture: any
 Depends:
  ${misc:Depends},
  ${shlibs:Depends},
+ qml-module-ubuntu-components
 Description: FM-Radio application
  An application to allow you to listen to the radio

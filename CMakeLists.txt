@@ -13,7 +13,7 @@ find_package(Qt5 REQUIRED NO_MODULE COMPONENTS Core Quick Test Gui Widgets Quick
 
 include(KDEInstallDirs)
 include(KDECMakeSettings)
-include(ECMQueryQmake)
+include(ECMQueryQt)
 include(GenerateExportHeader)
 
 configure_file(manifest.json.in ${CMAKE_CURRENT_BINARY_DIR}/manifest.json)
